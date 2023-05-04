@@ -1,0 +1,11 @@
+True; 
+
+False; 
+
+if True then True else False; 
+
+5; 
+
+if 2 + 2 then 1 else 0;
+
+10 + 10;

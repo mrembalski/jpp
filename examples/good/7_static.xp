@@ -1,0 +1,5 @@
+# Not really tested (yet)
+let f a b = 
+    let y = 10 in 
+    let x = 10 in
+    x + y;
