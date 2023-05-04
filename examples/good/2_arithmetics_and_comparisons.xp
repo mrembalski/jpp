@@ -1,24 +1,25 @@
-1 + 2; 
+additionExample = 1 + 2;
 
-3 - 4;
+subtractionExample = 3 - 4;
 
-5 * 6; 
+multiplicationExample = 5 * 6;
 
-7 / 8; 
+divisionExample = 7 / 8;
 
-9 > 10; 
+gtExample = 9 > 10;
 
-11 >= 12; 
+gtExample = 11 >= 12;
 
-13 < 14;
+ltExample = 13 < 14;
 
-15 <= 16; 
+leqExample = 15 <= 16;
 
-17 == 18;
+eqExample = 17 == 18;
 
-19 != 20;
+neqExample = 19 != 20;
 
-True && False;
+andExample = True && False;
 
-False || True; 
+orExample = False || True;
 
+notExample = !True;

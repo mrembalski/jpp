@@ -1,0 +1,9 @@
+# multi-arg functions
+addTwo x y = x + y;
+three = addTwo 1 2;
+
+mulFour a b c d = a * b * c * d;
+
+# recursion
+addByOne n acc = if n == 0 then acc else addByOne (n - 1) acc;
+four = addByOne 4 0;

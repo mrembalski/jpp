@@ -1,5 +1,4 @@
-let f x y z = x + y + z;
+f x y z = x + y + z;
 
-((f 2) 3);
-
-(f (2));
+partialApplication1 = f 2;
+partialApplication2 = f 2 3;

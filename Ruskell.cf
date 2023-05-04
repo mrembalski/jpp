@@ -1,19 +1,20 @@
--- Program ---------------------------------------------------------------
+-- Programs --------------------------------------------------------------
+-- Program as a set of declarations. This is Haskell-based. "2+2" is not a valid program, while "x=2+2" is.
 entrypoints Program;
-
-Prog. Program ::= [TopLevel] ;
-
--- TopLevel 
-TopLevelExp.                TopLevel ::= Exp ";" ;
-TopLevelDef.                TopLevel ::= Definition ";" ; 
-separator TopLevel "" ; 
+Prog.                       Program ::= [ Decl ] ;
 
 -- Definition
-Def.                        Definition ::= "let" [LetPartialDefinition];
-LetPartialDef.              LetPartialDefinition ::= Ident [Pattern] "=" Exp ;
-separator nonempty LetPartialDefinition "\n";
+-- Everything is a function - variables are 0-argument functions.
+Fun.                        Decl ::= Ident [Ident] "=" Exp;
+separator Ident "";
+separator Decl ";";
 
--- Operator 
+-- Literals
+Int.                        Literal ::= Integer;
+True.                       Literal ::= "True";
+False.                      Literal ::= "False";
+
+-- Operators
 Plus.                       AddOp ::= "+" ;
 Minus.                      AddOp ::= "-" ;
 Times.                      MulOp ::= "*" ;
@@ -26,54 +27,42 @@ Eq.                         RelOp ::= "==" ;
 Neq.                        RelOp ::= "!=" ;
 
 -- Expression
-PatternMatchingExp .        Exp9 ::=  "match" Exp6 "{" [PatternMatchingCasePattern] "}" ;
-Let.                        Exp9 ::= "let" LetPartialDefinition "in" Exp7 ;
-If.                         Exp9 ::= "if" Exp "then" Exp7 "else" Exp7 ;
-Lambda.                     Exp9 ::= "\\" [Pattern] "->" Exp7 ;
+PMExp .                     Exp ::=  "match" Exp "{" [PMPattern] "}" ;
+-- The "let" keyword is used only during inner declarations.
+Let.                        Exp ::= "let" "{" [Decl] "}" "in" Exp ;
+If.                         Exp ::= "if" Exp "then" Exp3 "else" Exp ;
+Lambda.                     Exp ::= "\\" [Ident] "->" Exp ;
 
-ELitInt.                    Exp8 ::= Integer ;
-EVar.                       Exp8 ::= Ident ;
-ELitTrue.                   Exp8 ::= "True" ;
-ELitFalse.                  Exp8 ::= "False" ;
-ENil.                       Exp8 ::= "[]" ;
-
-EListExp.                   Exp7 ::= "[" [ListElementExp] "]" ;
-ListElement.                ListElementExp ::= Exp6;
-separator nonempty ListElementExp ",";
-
-EApp.                       Exp7 ::=  "(" Exp6 Exp6 ")" ;
-
-EConcat.                    Exp6 ::= Exp6 ":" Exp7 ;
-
-Neg.                        Exp5 ::= "-" Exp6 ;
-Not.                        Exp5 ::= "not" Exp6 ;
-EMul.                       Exp4 ::= Exp4 MulOp Exp5 ;
-EAdd.                       Exp3 ::= Exp3 AddOp Exp4 ;
-ERel.                       Exp2 ::= Exp2 RelOp Exp3 ;
-EAnd.                       Exp1 ::= Exp2 "&&" Exp1 ;
 EOr.                        Exp ::= Exp1 "||" Exp ;
-coercions  Exp 10 ;
+EAnd.                       Exp1 ::= Exp2 "&&" Exp1 ;
+ERel.                       Exp2 ::= Exp2 RelOp Exp3 ;
+EAdd.                       Exp3 ::= Exp3 AddOp Exp4 ;
+EMul.                       Exp4 ::= Exp4 MulOp Exp5 ;
+EConcat.                    Exp5 ::= Exp6 ":" Exp5 ;
+Neg.                        Exp6 ::= "-" Exp7 ;
+Not.                        Exp6 ::= "!" Exp7 ;
+EApp.                       Exp7 ::= Exp7 Exp8 ;
+EListExp.                   Exp8 ::= "[" [Exp] "]" ;
+ELit.                       Exp8 ::= Literal ;
+EVar.                       Exp8 ::= Ident ;
 
--- Pattern 
-Int.                        Pattern2 ::= Integer ;
-NamePat.                    Pattern2 ::= Ident ;
-True.                       Pattern2 ::= "True" ;
-False.                      Pattern2 ::= "False" ;
-Nil.                        Pattern2 ::= "[]" ;
-IgnorePat.                  Pattern2 ::= "_" ;
+coercions Exp 8;
+separator Exp ",";
 
-ListPat.                    Pattern1 ::= Pattern2 ":" Pattern2 ;
-ListIcingPat.               Pattern1 ::= "[" [ListIcingArgumentPattern] "]" ;
+-- Patterns
+PMCase.                     PMPattern ::=  Pattern "->" Exp;
+separator PMPattern ",";
 
-ListIcingArg.               ListIcingArgumentPattern ::= Pattern2;
-separator nonempty ListIcingArgumentPattern ",";
+ListPat.                    Pattern1 ::= Pattern2 ":" Pattern1 ;
+ListIcingPat.               Pattern1 ::= "[" [Pattern] "]" ;
 
-coercions Pattern 3;
-separator Pattern "";
+Lit.                        Pattern2 ::= Literal;
+Var.                        Pattern2 ::= Ident ;
+Any.                        Pattern2 ::= "_" ;
 
--- Pattern matching
-PatternMatchingCase. PatternMatchingCasePattern ::=  Pattern "->" Exp ;
-separator PatternMatchingCasePattern "\n";
+coercions Pattern 2;
+separator Pattern ",";
+
 
 -- Comments
 comment    "#";

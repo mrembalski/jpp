@@ -1,1 +1,1 @@
-let apply_other_function other_function x = (other_function x);
+applyOtherFunction otherFunction x = (otherFunction x);

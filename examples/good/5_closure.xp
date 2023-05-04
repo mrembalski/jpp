@@ -1,3 +1,1 @@
-let x = let f x = x + 1 in (f 5);
-
-(f 2); # this will result in an error (later)
+f x = (\y -> x + y)

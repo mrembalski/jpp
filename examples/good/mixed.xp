@@ -1,8 +1,8 @@
-let fact_acc x acc = if x == 0 then acc else ((fact (x - 1)) (x * acc)); 
-let fact x = ((fact_acc x) 1);
+fact_acc x acc = if x == 0 then acc else ((fact (x - 1)) (x * acc));
+fact x = ((fact_acc x) 1);
 
 # 120
-((fact 5) 1); 
+fact5 = fact 5 1;
 
 # 6
-((fact 3) 1);
+fact3 = fact 3 1;
