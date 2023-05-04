@@ -1,0 +1,80 @@
+-- Program ---------------------------------------------------------------
+entrypoints Program;
+
+Prog. Program ::= [TopLevel] ;
+
+-- TopLevel 
+TopLevelExp.                TopLevel ::= Exp ";" ;
+TopLevelDef.                TopLevel ::= Definition ";" ; 
+separator TopLevel "" ; 
+
+-- Definition
+Def.                        Definition ::= "let" [LetPartialDefinition];
+LetPartialDef.              LetPartialDefinition ::= Ident [Pattern] "=" Exp ;
+separator nonempty LetPartialDefinition "\n";
+
+-- Operator 
+Plus.                       AddOp ::= "+" ;
+Minus.                      AddOp ::= "-" ;
+Times.                      MulOp ::= "*" ;
+Div.                        MulOp ::= "/" ;
+Lt.                         RelOp ::= "<" ;
+Le.                         RelOp ::= "<=" ;
+Gt.                         RelOp ::= ">" ;
+Ge.                         RelOp ::= ">=" ;
+Eq.                         RelOp ::= "==" ;
+Neq.                        RelOp ::= "!=" ;
+
+-- Expression
+PatternMatchingExp .        Exp9 ::=  "match" Exp6 "{" [PatternMatchingCasePattern] "}" ;
+Let.                        Exp9 ::= "let" LetPartialDefinition "in" Exp7 ;
+If.                         Exp9 ::= "if" Exp "then" Exp7 "else" Exp7 ;
+Lambda.                     Exp9 ::= "\\" [Pattern] "->" Exp7 ;
+
+ELitInt.                    Exp8 ::= Integer ;
+EVar.                       Exp8 ::= Ident ;
+ELitTrue.                   Exp8 ::= "True" ;
+ELitFalse.                  Exp8 ::= "False" ;
+ENil.                       Exp8 ::= "[]" ;
+
+EListExp.                   Exp7 ::= "[" [ListElementExp] "]" ;
+ListElement.                ListElementExp ::= Exp6;
+separator nonempty ListElementExp ",";
+
+EApp.                       Exp7 ::=  "(" Exp6 Exp6 ")" ;
+
+EConcat.                    Exp6 ::= Exp6 ":" Exp7 ;
+
+Neg.                        Exp5 ::= "-" Exp6 ;
+Not.                        Exp5 ::= "not" Exp6 ;
+EMul.                       Exp4 ::= Exp4 MulOp Exp5 ;
+EAdd.                       Exp3 ::= Exp3 AddOp Exp4 ;
+ERel.                       Exp2 ::= Exp2 RelOp Exp3 ;
+EAnd.                       Exp1 ::= Exp2 "&&" Exp1 ;
+EOr.                        Exp ::= Exp1 "||" Exp ;
+coercions  Exp 10 ;
+
+-- Pattern 
+Int.                        Pattern2 ::= Integer ;
+NamePat.                    Pattern2 ::= Ident ;
+True.                       Pattern2 ::= "True" ;
+False.                      Pattern2 ::= "False" ;
+Nil.                        Pattern2 ::= "[]" ;
+IgnorePat.                  Pattern2 ::= "_" ;
+
+ListPat.                    Pattern1 ::= Pattern2 ":" Pattern2 ;
+ListIcingPat.               Pattern1 ::= "[" [ListIcingArgumentPattern] "]" ;
+
+ListIcingArg.               ListIcingArgumentPattern ::= Pattern2;
+separator nonempty ListIcingArgumentPattern ",";
+
+coercions Pattern 3;
+separator Pattern "";
+
+-- Pattern matching
+PatternMatchingCase. PatternMatchingCasePattern ::=  Pattern "->" Exp ;
+separator PatternMatchingCasePattern "\n";
+
+-- Comments
+comment    "#";
+comment    "###" "###";
