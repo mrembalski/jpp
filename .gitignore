@@ -1,11 +1,1 @@
-*.o
-*.hi
-*.hs
-*.info
-
-DocRuskell.txt
-LexRuskell.x
-ParRuskell.y
-TestRuskell
-
-!Interpreter.hs
+src/Ruskell
