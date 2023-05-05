@@ -1,5 +1,3 @@
-cd build
-
-bnfc -m ../Ruskell.cf
+bnfc --functor -m Ruskell.cf
 
 make
