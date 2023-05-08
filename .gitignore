@@ -3,3 +3,5 @@
 *.info
 
 src/Ruskell
+
+src/Interpreter
