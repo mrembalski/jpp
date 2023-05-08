@@ -1,1 +1,3 @@
 anonymousFunctionExample = (\x -> x * 2) 5;
+
+main = anonymousFunctionExample == 10;

@@ -1,1 +1,1 @@
-x = 1 / 0; # this will result in an error (later)
+main = 1 / 0;

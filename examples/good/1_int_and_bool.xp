@@ -4,8 +4,9 @@ false = False;
 
 shouldBeFalse = if True then True else False;
 
-x = 5;
 
 parses = if 2 + 2 then 1 else 0;
 
-twenty = 10 + 10;
+twenty_one = 21;
+
+main = twenty_one >= 20;

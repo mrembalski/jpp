@@ -1,4 +1,4 @@
-matchExample = match x {
-    []      -> 1,
-    x:xs    -> 2
+main = match x {
+    x:y:z:xs  -> True,
+    _ -> False,
 };

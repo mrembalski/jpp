@@ -1,1 +1,3 @@
 applyOtherFunction otherFunction x = (otherFunction x);
+
+main = (applyOtherFunction (\x -> x * 2) 5) == 10;

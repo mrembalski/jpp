@@ -1,3 +1,5 @@
-weirdIfExample = if 2 + 2 then 4 else 5;
+weirdIfExample = if 2 + 2 then 4 else 5; # this parses, but is not valid
 
 ifExample = if True then False else True;
+
+main = ifExample;

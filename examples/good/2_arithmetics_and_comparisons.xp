@@ -8,18 +8,34 @@ divisionExample = 7 / 8;
 
 gtExample = 9 > 10;
 
-gtExample = 11 >= 12;
+geExample = 11 >= 12;
 
 ltExample = 13 < 14;
 
-leqExample = 15 <= 16;
+leExample = 15 <= 16;
 
 eqExample = 17 == 18;
 
-neqExample = 19 != 20;
+neExample = 19 != 20;
 
 andExample = True && False;
 
 orExample = False || True;
 
 notExample = !True;
+
+main = if
+    gtExample
+    || geExample
+    || ltExample
+    || leExample
+    || eqExample
+    || neExample
+    || andExample
+    || orExample
+    || notExample
+    || True
+    then
+        additionExample - subtractionExample + multiplicationExample - divisionExample # 34
+    else
+        -1;

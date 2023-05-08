@@ -1,5 +1,13 @@
-staticExample =
+functionDef =
+    let { a = 1 } in
+        let { f x = a + x } in
+            let { a = 2 } in
+                f a; # 3
+
+lambdaDef =
     let { a = 1 } in
         let { f = \x -> a + x } in
             let { a = 2 } in
                 f a; # 3
+
+main = functionDef == lambdaDef

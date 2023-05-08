@@ -1,4 +1,5 @@
 f x y z = x + y + z;
 
 partialApplication1 = f 2;
-partialApplication2 = f 2 3;
+
+main = partialApplication1 3 4;
