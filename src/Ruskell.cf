@@ -5,14 +5,14 @@ P.                          Program ::= [ Decl ] ;
 
 -- Definition
 -- Everything is a function - variables are 0-argument functions.
-FunD.                       Decl ::= Ident [Ident] "=" Exp;
-separator Ident "";
-separator Decl ";";
+FunD.                       Decl ::= Ident [ Ident ] "=" Exp ;
+separator Ident "" ;
+separator Decl ";" ;
 
 -- Literals
-IntL.                       Literal ::= Integer;
-TL.                         Literal ::= "True";
-FL.                         Literal ::= "False";
+IntL.                       Literal ::= Integer ;
+TL.                         Literal ::= "True" ;
+FL.                         Literal ::= "False" ;
 
 -- Operators
 AddO.                       AddOp ::= "+" ;
@@ -27,11 +27,11 @@ EqO.                        RelOp ::= "==" ;
 NeO.                        RelOp ::= "!=" ;
 
 -- Expression
-PME.                        Exp ::=  "match" Exp "{" [PMPattern] "}" ;
+PME.                        Exp ::=  "match" Exp "{" [ PMPattern ] "}" ;
 -- The "let" keyword is used only during inner declarations.
-LetE.                       Exp ::= "let" "{" [Decl] "}" "in" Exp ;
+LetE.                       Exp ::= "let" "{" [ Decl ] "}" "in" Exp ;
 IfE.                        Exp ::= "if" Exp "then" Exp3 "else" Exp ;
-LmE.                        Exp ::= "\\" [Ident] "->" Exp ;
+LmE.                        Exp ::= "\\" [ Ident ] "->" Exp ;
 
 OrE.                        Exp ::= Exp1 "||" Exp ;
 AndE.                       Exp1 ::= Exp2 "&&" Exp1 ;
@@ -42,28 +42,28 @@ ConE.                       Exp5 ::= Exp6 ":" Exp5 ;
 NegE.                       Exp6 ::= "-" Exp7 ;
 NotE.                       Exp6 ::= "!" Exp7 ;
 AppE.                       Exp7 ::= Exp7 Exp8 ;
-LstE.                       Exp8 ::= "[" [Exp] "]" ;
+LstE.                       Exp8 ::= "[" [ Exp ] "]" ;
 LitE.                       Exp8 ::= Literal ;
 VarE.                       Exp8 ::= Ident ;
 
-coercions Exp 8;
-separator Exp ",";
+coercions Exp 8 ;
+separator Exp "," ;
 
 -- Patterns
-PMCaseP.                     PMPattern ::=  Pattern "->" Exp;
-separator PMPattern ",";
+PMCaseP.                     PMPattern ::=  Pattern "->" Exp ;
+separator PMPattern "," ;
 
 LstP.                       Pattern1 ::= Pattern2 ":" Pattern1 ;
-LstIcngP.                   Pattern1 ::= "[" [Pattern] "]" ;
+LstIcngP.                   Pattern1 ::= "[" [ Pattern ] "]" ;
 
-LitP.                       Pattern2 ::= Literal;
+LitP.                       Pattern2 ::= Literal ;
 VarP.                       Pattern2 ::= Ident ;
 AnyP.                       Pattern2 ::= "_" ;
 
-coercions Pattern 2;
-separator Pattern ",";
+coercions Pattern 2 ;
+separator Pattern "," ;
 
 
 -- Comments
-comment    "#";
-comment    "###" "###";
+comment    "#" ;
+comment    "###" "###" ;
