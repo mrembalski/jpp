@@ -5,7 +5,7 @@ for f in ../examples/good/*; do
 
     echo "\"$f\"..."
 
-    ./Interpreter < "$f"
+    ./Interpreter "$f"
 
     if [ $? -eq 0 ]; then
         counter=$((counter+1))
