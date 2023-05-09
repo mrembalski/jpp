@@ -1,12 +1,11 @@
-true = True;
+negate x = !x;
 
-false = False;
+doubleNegate x = negate (negate x);
 
-shouldBeFalse = if True then True else False;
+doubleDoubleNegate = doubleNegate (doubleNegate);
 
+isPositive x = if x > 0 then True else False;
+
+main = doubleDoubleNegate (isPositive 10) == True;
 
 parses = if 2 + 2 then 1 else 0;
-
-twenty_one = 21;
-
-main = twenty_one >= 20;

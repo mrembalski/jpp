@@ -1,4 +1,1 @@
-main = match x {
-    x:y:z:xs  -> True,
-    _ -> False,
-};
+main = if empty [] then tail [1, 2, 3] else head [5, 6, 7]
