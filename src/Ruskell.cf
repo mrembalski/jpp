@@ -26,8 +26,11 @@ GeO.                        RelOp ::= ">=" ;
 EqO.                        RelOp ::= "==" ;
 NeO.                        RelOp ::= "!=" ;
 
+Hd.                         Fun ::= "head" ;
+Tl.                         Fun ::= "tail" ;
+Em.                         Fun ::= "empty" ;
+
 -- Expression
-PME.                        Exp ::=  "match" Exp "{" [ PMPattern ] "}" ;
 -- The "let" keyword is used only during inner declarations.
 LetE.                       Exp ::= "let" "{" [ Decl ] "}" "in" Exp ;
 IfE.                        Exp ::= "if" Exp "then" Exp3 "else" Exp ;
@@ -42,26 +45,13 @@ ConE.                       Exp5 ::= Exp6 ":" Exp5 ;
 NegE.                       Exp6 ::= "-" Exp7 ;
 NotE.                       Exp6 ::= "!" Exp7 ;
 AppE.                       Exp7 ::= Exp7 Exp8 ;
+FunE.                       Exp8 ::= Fun Exp8 ;
 LstE.                       Exp8 ::= "[" [ Exp ] "]" ;
 LitE.                       Exp8 ::= Literal ;
 VarE.                       Exp8 ::= Ident ;
 
 coercions Exp 8 ;
 separator Exp "," ;
-
--- Patterns
-PMCaseP.                     PMPattern ::=  Pattern "->" Exp ;
-separator PMPattern "," ;
-
-LstP.                       Pattern1 ::= Pattern2 ":" Pattern1 ;
-LstIcngP.                   Pattern1 ::= "[" [ Pattern ] "]" ;
-
-LitP.                       Pattern2 ::= Literal ;
-VarP.                       Pattern2 ::= Ident ;
-AnyP.                       Pattern2 ::= "_" ;
-
-coercions Pattern 2 ;
-separator Pattern "," ;
 
 
 -- Comments
