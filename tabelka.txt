@@ -7,8 +7,8 @@
   + 06 (obsługa błędów wykonania)
   + 07 (statyczne wiązanie identyfikatorów)
   Listy:
-  + 08 (z pattern matchingiem)
-  - 09 (z empty, head, tail)
+  - 08 (z pattern matchingiem)
+  + 09 (z empty, head, tail)
   + 10 (lukier)
   Na 25 punktów
   - 11 (listy dowolnego typu, zagnieżdżone i listy funkcji)
@@ -23,9 +23,9 @@
 
 Razem: 20
 
-Uwaga: 
-Zgodnie z tym, co było mówione na zajęciach, zaznaczyłem te punkty, które 
-na 99% zrobię. Chcę wykonać dodatkowe podpunkty, jednak nie jestem, co do 
-nich pewien, czy uda mi się je zrobić. Zgodnie z treścią zadania, jezeli 
-sytuacja się zmieni, będę kontaktował się ze sprawdzającym i aktualizował 
-tabelkę cech. 
+Uwaga:
+Zgodnie z tym, co było mówione na zajęciach, zaznaczyłem te punkty, które
+na 99% zrobię. Chcę wykonać dodatkowe podpunkty, jednak nie jestem, co do
+nich pewien, czy uda mi się je zrobić. Zgodnie z treścią zadania, jezeli
+sytuacja się zmieni, będę kontaktował się ze sprawdzającym i aktualizował
+tabelkę cech.

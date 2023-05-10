@@ -19,7 +19,6 @@ ALEX_OPTS  = --ghc
 all : Main
 
 # Rules for building the parser.
-
 Ruskell/Abs.hs Ruskell/LexRuskell.x Ruskell/ParRuskell.y Ruskell/Print.hs Ruskell/Test.hs : Ruskell.cf
 	bnfc --haskell -d --functor Ruskell.cf
 
