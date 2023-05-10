@@ -20,5 +20,5 @@ main :: IO ()
 main = do
   args <- getArgs
   case args of
-    [] -> putStrLn "reading from stdin...\n" >> getContents >>= runProgram
+    [] -> getContents >>= runProgram
     filename -> mapM_ runFile filename
