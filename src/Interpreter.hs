@@ -36,6 +36,7 @@ instance Show Value where
 
 type Env = Map String Value
 
+-- nicer-looking error messages
 prettyBNFC :: BNFC'Position -> String
 prettyBNFC p = case p of
   Just (l, c) -> "line " ++ show l ++ ", column " ++ show c
@@ -44,6 +45,7 @@ prettyBNFC p = case p of
 interpreterError :: BNFC'Position -> String -> ReaderT Env Err Value
 interpreterError p m = throwError ("error at " ++ prettyBNFC p ++ ":\n" ++ m)
 
+-- helper functions
 allInts :: [Value] -> Bool
 allInts =
   all
@@ -61,10 +63,33 @@ allBools =
     )
 
 eval :: Exp -> ReaderT Env Err Value
+-- literals and simple expressions
 eval (LitE _ n) = case n of
   IntL _ n -> return $ IntV n
   TL _ -> return $ BoolV True
   FL _ -> return $ BoolV False
+eval (NotE p e) = do
+  e' <- eval e
+  case e' of
+    BoolV e'' -> return $ BoolV $ not e''
+    _ -> interpreterError p ("Invalid usage of 'not' on " ++ show e')
+eval (NegE p e) = do
+  e' <- eval e
+  case e' of
+    IntV e'' -> return $ IntV $ -e''
+    _ -> interpreterError p ("Invalid usage of '-' on " ++ show e' ++ ".")
+eval (OrE p l r) = do
+  l' <- eval l
+  r' <- eval r
+  case (l', r') of
+    (BoolV l'', BoolV r'') -> return $ BoolV $ l'' || r''
+    _ -> interpreterError p ("Cannot use '||' between " ++ show l' ++ " and " ++ show r' ++ ".")
+eval (AndE p l r) = do
+  l' <- eval l
+  r' <- eval r
+  case (l', r') of
+    (BoolV l'', BoolV r'') -> return $ BoolV $ l'' && r''
+    _ -> interpreterError p ("Cannot use '&&' between " ++ show l' ++ " and " ++ show r' ++ ".")
 eval (AddE p l o r) = do
   l' <- eval l
   r' <- eval r
@@ -74,11 +99,6 @@ eval (AddE p l o r) = do
         AddO _ -> return $ IntV $ l'' + r''
         SubO _ -> return $ IntV $ l'' - r''
     _ -> interpreterError p "Invalid usage of '+' or '-' between different types."
-eval (NegE p e) = do
-  e' <- eval e
-  case e' of
-    IntV e'' -> return $ IntV $ -e''
-    _ -> interpreterError p ("Invalid usage of '-' on " ++ show e' ++ ".")
 eval (MulE p l o r) = do
   l' <- eval l
   r' <- eval r
@@ -108,37 +128,8 @@ eval (RelE p l o r) = do
         NeO _ -> return $ BoolV $ l'' /= r''
         _ -> interpreterError p "Invalid comparison between bools."
     _ -> interpreterError p "Invalid comparison between different types."
-eval (OrE p l r) = do
-  l' <- eval l
-  r' <- eval r
-  case (l', r') of
-    (BoolV l'', BoolV r'') -> return $ BoolV $ l'' || r''
-    _ -> interpreterError p ("Cannot use '||' between " ++ show l' ++ " and " ++ show r' ++ ".")
-eval (AndE p l r) = do
-  l' <- eval l
-  r' <- eval r
-  case (l', r') of
-    (BoolV l'', BoolV r'') -> return $ BoolV $ l'' && r''
-    _ -> interpreterError p ("Cannot use '&&' between " ++ show l' ++ " and " ++ show r' ++ ".")
-eval (IfE p cond t f) = do
-  cond' <- eval cond
-  case cond' of
-    BoolV cond'' -> if cond'' then eval t else eval f
-    _ -> interpreterError p ("Invalid condition: " ++ show cond')
-eval (NotE p exp) = do
-  exp' <- eval exp
-  case exp' of
-    BoolV exp'' -> return $ BoolV $ not exp''
-    _ -> interpreterError p ("Invalid usage of 'not' on " ++ show exp')
-eval (AppE _ f exp) = do
-  val <- eval exp
-  f' <- eval f
-  case f' of
-    FunV (LambdaF (Ident var) fun) env -> do
-      case fun of
-        ExpF exp' -> local (const $ insert var val env) (eval exp')
-        LambdaF _ _ -> return $ FunV fun (insert var val env)
-    _ -> interpreterError Nothing ("Cannot apply " ++ show f' ++ " to " ++ show val)
+
+-- variables
 eval (VarE p (Ident var)) = do
   env <- ask
   case env !? var of
@@ -148,12 +139,34 @@ eval (VarE p (Ident var)) = do
         LambdaF _ _ -> return $ FunV fun (insert var val env)
       _ -> return val
     Nothing -> interpreterError p ("Variable " ++ var ++ " not found.")
-eval (LmE p args exp) = do
-  asks (FunV (foldr LambdaF (ExpF exp) args))
-eval (LetE p ds exp) = do
+
+-- if
+eval (IfE p c t f) = do
+  c' <- eval c
+  case c' of
+    BoolV c'' -> if c'' then eval t else eval f
+    _ -> interpreterError p ("Invalid condition: " ++ show c')
+
+-- lambda & application
+eval (LmE p args e) = do
+  asks (FunV (foldr LambdaF (ExpF e) args))
+eval (AppE _ f e) = do
+  val <- eval e
+  f' <- eval f
+  case f' of
+    FunV (LambdaF (Ident var) fun) env -> do
+      case fun of
+        ExpF exp' -> local (const $ insert var val env) (eval exp')
+        LambdaF _ _ -> return $ FunV fun (insert var val env)
+    _ -> interpreterError Nothing ("Cannot apply " ++ show f' ++ " to " ++ show val)
+
+-- let
+eval (LetE p ds e) = do
   env <- ask
   let (Right env') = foldM (\e d -> execStateT (declare d) e) env ds
-  local (const env') (eval exp)
+  local (const env') (eval e)
+
+-- lists
 eval (LstE p exps) = do
   exps' <- mapM eval exps
   case (null exps', allInts exps', allBools exps') of
@@ -161,6 +174,17 @@ eval (LstE p exps) = do
     (_, True, _) -> return $ ListV $ IntListV $ map (\(IntV n) -> n) exps'
     (_, _, True) -> return $ ListV $ BoolListV $ map (\(BoolV b) -> b) exps'
     _ -> interpreterError p ("Invalid list: " ++ show exps')
+eval (ConE p e l) = do
+  l' <- eval l
+  e' <- eval e
+  case (e', l') of
+    (IntV e'', ListV (IntListV l'')) -> return $ ListV $ IntListV $ e'' : l''
+    (IntV e'', ListV EmptyList) -> return $ ListV $ IntListV [e'']
+    (BoolV e'', ListV (BoolListV l'')) -> return $ ListV $ BoolListV $ e'' : l''
+    (BoolV e'', ListV EmptyList) -> return $ ListV $ BoolListV [e'']
+    _ -> interpreterError p ("Cannot append " ++ show e' ++ " to " ++ show l' ++ ".")
+
+-- builtin functions
 eval (FunE p o e) = do
   e' <- eval e
   case e' of
@@ -177,15 +201,6 @@ eval (FunE p o e) = do
       Tl _ -> return $ ListV EmptyList
       _ -> interpreterError p "Invalid operation on an empty list."
     _ -> interpreterError p "Invalid list operation on a non-list."
-eval (ConE p e l) = do
-  l' <- eval l
-  e' <- eval e
-  case (e', l') of
-    (IntV e'', ListV (IntListV l'')) -> return $ ListV $ IntListV $ e'' : l''
-    (IntV e'', ListV EmptyList) -> return $ ListV $ IntListV [e'']
-    (BoolV e'', ListV (BoolListV l'')) -> return $ ListV $ BoolListV $ e'' : l''
-    (BoolV e'', ListV EmptyList) -> return $ ListV $ BoolListV [e'']
-    _ -> interpreterError p ("Cannot append " ++ show e' ++ " to " ++ show l' ++ ".")
 
 declare :: Decl -> StateT Env Err ()
 declare (FunD _ (Ident var) args exp) = do
@@ -199,4 +214,6 @@ evalMain :: Env -> Err Value
 evalMain a = case a !? "main" of
   Just (FunV (ExpF exp) env) -> runReaderT (eval exp) env
   Just (FunV _ _) -> throwError "Main function should not be be parameterized."
-  _ -> return $ IntV (-1)
+  -- this should not happen due to the core definition of the language
+  Just _ -> throwError "Main function should be an expression."
+  _ -> throwError "Main function not found."
