@@ -8,11 +8,11 @@ runFile f = readFile f >>= runProgram
 
 runProgram :: String -> IO ()
 runProgram code = case pProgram $ myLexer code of
-  Left e -> putStrLn ("parsing: " ++ e) >> exitFailure
+  Left e -> putStrLn e >> exitFailure
   Right parsed -> case interpret parsed of
-    Left e -> putStrLn ("interpretation: " ++ e) >> exitFailure
+    Left e -> putStrLn e >> exitFailure
     Right interpreted -> case evalMain interpreted of
-      Left e -> putStrLn ("main evaluation: " ++ e) >> exitFailure
+      Left e -> putStrLn e >> exitFailure
       Right val -> print val
 
 main :: IO ()
