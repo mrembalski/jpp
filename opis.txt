@@ -1,22 +1,21 @@
 
-Nazwa języka: Ruskell 
+Nazwa języka: Ruskell
 
-Jest to bardzo prosty język oparty w duzej mierze o znane języki funkcyjne. 
+Jest to bardzo prosty język oparty w duzej mierze o znane języki funkcyjne.
 
-Cechuje się między innymi: 
+Cechuje się między innymi:
 
-- pattern matching (do funkcji, syntax Haskell-based)
-- match value (wartości, syntax Rust-based, bardzo ładna)
-- dązeniem do prostoty i czytelności poprzez zgodność 
+- wbudowanymi funkcjami empty, head, tail
+- dązeniem do prostoty i czytelności poprzez zgodność
 z rachunkiem lambda (docelowo)
-- dynamiczne typowanie (docelowo, jednak "jezeli starczy czasu" 
-moze zostać zmienione na statyczne)
+- funkcjami częsciowymi, wieloargumentowymi, wyższego rzędu i rekurencją (examples/good)
+- dynamiczne typowanie (docelowo, jednak "jezeli starczy czasu" moze zostać zmienione na statyczne)
 - lukier syntaktyczny dla list
 - funkcje wieloargumentowe
-- bezkonfliktowa gramatyka 
+- bezkonfliktowa gramatyka
 - wyrazenia lambda
 
-Ma za zadanie być prostym językiem funkcyjnym, który będzie łatwy w nauce, 
+Ma za zadanie być prostym językiem funkcyjnym, który będzie łatwy w nauce,
 a jednocześnie będzie miał możliwość wykorzystania w praktyce.
 
 Gramatykę mozna sprawdzic za pomocą ./ops/compile.sh oraz ./ops/run_good.sh.
