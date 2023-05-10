@@ -1,11 +1,8 @@
 # multi-arg functions
-addTwo x y = x + y;
-three = addTwo 1 2;
-
 mulFour a b c d = a * b * c * d;
 
 # recursion
 addByOne n acc = if n == 0 then acc else addByOne (n - 1) (acc + 1);
-four = addByOne 4 0;
+oneTwenty = addByOne 120 0;
 
-main = four;
+main = oneTwenty == mulFour 2 3 4 5;

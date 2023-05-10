@@ -1,3 +1,7 @@
 f x = \y -> x + y;
 
-main = (f 5 3) == 8;
+g x = let {
+    b y = x + y;
+} in b;
+
+main = f 5 3 == g 5 3;
