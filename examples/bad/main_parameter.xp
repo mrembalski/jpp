@@ -1,1 +1,2 @@
+# main can not be parameterized (this can be later changed, but it's not a priority)
 main x = x

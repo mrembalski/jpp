@@ -1,0 +1,4 @@
+# head function can not be redeclared - it is a built-in function
+head x = if empty x then True else False;
+
+main = head [] == False

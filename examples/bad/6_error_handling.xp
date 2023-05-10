@@ -1,1 +1,2 @@
+# dividing by zero results in an error
 main = 1 / 0;
