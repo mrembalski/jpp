@@ -1,1 +1,9 @@
-main = [1, 2, 3, 4]
+initialList = [1, 2, 3, 4];
+
+# list n..0
+recursionLoopAppend n = if n == 0 then [0] else n:(recursionLoopAppend (n - 1));
+
+# x ++ y
+recursionMerge x y = if empty x then y else (head x):(recursionMerge (tail x) y);
+
+main = recursionMerge (recursionLoopAppend 10) initialList;
