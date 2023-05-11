@@ -2,7 +2,6 @@
 
 module Interpreter where
 
-import Control.Monad (foldM)
 import Control.Monad.Except
 import Control.Monad.Reader
 import Control.Monad.Trans.State (StateT, execStateT, get, modify, put)
@@ -98,7 +97,7 @@ eval (AddE p l o r) = do
       case o of
         AddO _ -> return $ IntV $ l'' + r''
         SubO _ -> return $ IntV $ l'' - r''
-    _ -> interpreterError p "Invalid usage of '+' or '-' between different types."
+    _ -> interpreterError p "Invalid usage of '+' or '-' between not-integers."
 eval (MulE p l o r) = do
   l' <- eval l
   r' <- eval r
@@ -109,7 +108,7 @@ eval (MulE p l o r) = do
         DivO p' -> case r'' of
           0 -> interpreterError p' "Division by zero."
           _ -> return $ IntV $ l'' `div` r''
-    _ -> interpreterError p "Invalid usage of '*' or '/' between different types."
+    _ -> interpreterError p "Invalid usage of '*' or '/' between not-integers."
 eval (RelE p l o r) = do
   l' <- eval l
   r' <- eval r
@@ -163,7 +162,7 @@ eval (AppE _ f e) = do
 -- let
 eval (LetE p ds e) = do
   env <- ask
-  let (Right env') = foldM (\e d -> execStateT (declare d) e) env ds
+  let (Right env') = execStateT (mapM_ declare ds) env
   local (const env') (eval e)
 
 -- lists
@@ -207,13 +206,15 @@ declare (FunD _ (Ident var) args exp) = do
   env <- get
   put $ insert var (FunV (foldr LambdaF (ExpF exp) args) env) env
 
+initialEnv :: Env
+initialEnv = empty
+
 interpret :: Program -> Err Env
-interpret (P _ ds) = foldM (\e d -> execStateT (declare d) e) empty ds
+interpret (P _ ds) = execStateT (mapM_ declare ds) initialEnv
 
 evalMain :: Env -> Err Value
-evalMain a = case a !? "main" of
-  Just (FunV (ExpF exp) env) -> runReaderT (eval exp) env
-  Just (FunV _ _) -> throwError "Main function should not be be parameterized."
-  -- this should not happen due to the core definition of the language
-  Just _ -> throwError "Main function should be an expression."
-  _ -> throwError "Main function not found."
+evalMain env = case env !? "main" of
+  Just main -> case main of
+    FunV (ExpF exp) env' -> runReaderT (eval exp) env'
+    _ -> throwError "Main function incorrect - invalid declaration or parameterized."
+  Nothing -> throwError "Main function not found."
