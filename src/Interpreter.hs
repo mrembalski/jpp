@@ -4,7 +4,7 @@ module Interpreter where
 
 import Control.Monad.Except
 import Control.Monad.Reader
-import Control.Monad.Trans.State (StateT, execStateT, get, modify, put)
+import Control.Monad.State
 import Data.Map.Lazy (Map, empty, insert, (!?))
 import Ruskell.Abs
 import Ruskell.ErrM
@@ -133,8 +133,8 @@ eval (VarE p (Ident var)) = do
   env <- ask
   case env !? var of
     Just val -> case val of
-      FunV fun exp -> case fun of
-        ExpF exp' -> local (const $ insert var val env) (eval exp')
+      FunV fun env' -> case fun of
+        ExpF exp -> local (const $ insert var val env) (eval exp)
         LambdaF _ _ -> return $ FunV fun (insert var val env)
       _ -> return val
     Nothing -> interpreterError p ("Variable " ++ var ++ " not found.")
@@ -149,15 +149,15 @@ eval (IfE p c t f) = do
 -- lambda & application
 eval (LmE p args e) = do
   asks (FunV (foldr LambdaF (ExpF e) args))
-eval (AppE _ f e) = do
-  val <- eval e
-  f' <- eval f
-  case f' of
-    FunV (LambdaF (Ident var) fun) env -> do
-      case fun of
-        ExpF exp' -> local (const $ insert var val env) (eval exp')
-        LambdaF _ _ -> return $ FunV fun (insert var val env)
-    _ -> interpreterError Nothing ("Cannot apply " ++ show f' ++ " to " ++ show val)
+eval (AppE p l r) = do
+  r' <- eval r
+  l' <- eval l
+  case l' of
+    -- left side must be a function
+    -- application "takes off" one variable from the lambda
+    FunV (LambdaF (Ident var) (ExpF exp)) env -> local (const $ insert var r' env) (eval exp)
+    FunV (LambdaF (Ident var) lm) env -> return $ FunV lm (insert var r' env)
+    _ -> interpreterError p ("Cannot apply (left: " ++ show l' ++ ") to (right: " ++ show r' ++ ").")
 
 -- let
 eval (LetE p ds e) = do
