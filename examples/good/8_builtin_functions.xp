@@ -1,1 +1,9 @@
-main = if empty [] then tail [1, 2, 3] else head [5, 6, 7]
+boolList = [True, False, True, False];
+
+intList = [1, 0, 1, 0];
+
+boolToInt lst =
+    if empty lst then [] else
+    (if head lst then 1 else 0) : boolToInt (tail lst);
+
+main = boolToInt boolList == intList;

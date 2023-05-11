@@ -1,0 +1,5 @@
+functionA = \x -> x + 1;
+
+functionB = \y -> y + 2;
+
+main = functionA == functionB;

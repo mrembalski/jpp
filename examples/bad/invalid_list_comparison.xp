@@ -1,0 +1,9 @@
+intList = [1];
+
+boolList = [True];
+
+emptyIntList = tail intList;
+
+emptyBoolList = tail boolList;
+
+main = emptyIntList == emptyBoolList;
