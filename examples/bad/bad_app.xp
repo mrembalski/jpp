@@ -1,0 +1,6 @@
+
+notFunction = 10;
+
+# results in an error "cannot apply 10 to 1", since notFunction
+# is... not a function
+main = notFunction 1;
