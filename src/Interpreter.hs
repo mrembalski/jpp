@@ -126,6 +126,26 @@ eval (RelE p l o r) = do
         EqO _ -> return $ BoolV $ l'' == r''
         NeO _ -> return $ BoolV $ l'' /= r''
         _ -> interpreterError p "Invalid comparison between bools."
+    (ListV l'', ListV r'') ->
+      case (l'', r'') of
+        (IntListV l''', IntListV r''') ->
+          case o of
+            EqO _ -> return $ BoolV $ l''' == r'''
+            NeO _ -> return $ BoolV $ l''' /= r'''
+            _ -> interpreterError p "Invalid comparison between lists."
+        (BoolListV l''', BoolListV r''') ->
+          case o of
+            EqO _ -> return $ BoolV $ l''' == r'''
+            NeO _ -> return $ BoolV $ l''' /= r'''
+            _ -> interpreterError p "Invalid comparison between lists."
+        (EmptyList, EmptyList) ->
+          case o of
+            EqO _ -> return $ BoolV True
+            NeO _ -> return $ BoolV False
+            _ -> interpreterError p "Invalid comparison between lists."
+        _ -> interpreterError p "Invalid comparison between lists of different types."
+    (FunV l'' _, FunV r'' _) ->
+      interpreterError p "Cannot compare functions."
     _ -> interpreterError p "Invalid comparison between different types."
 
 -- variables
@@ -188,17 +208,21 @@ eval (FunE p o e) = do
   e' <- eval e
   case e' of
     ListV (IntListV l) -> case o of
-      Hd _ -> return $ IntV $ head l
+      Hd _ -> case l of
+        [] -> interpreterError p "Cannot get head of an empty list."
+        (x : _) -> return $ IntV x
       Tl _ -> return $ ListV $ IntListV $ tail l
       Em _ -> return $ BoolV $ null l
     ListV (BoolListV l) -> case o of
-      Hd _ -> return $ BoolV $ head l
+      Hd _ -> case l of
+        [] -> interpreterError p "Cannot get head of an empty list."
+        (x : _) -> return $ BoolV x
       Tl _ -> return $ ListV $ BoolListV $ tail l
       Em _ -> return $ BoolV $ null l
     ListV EmptyList -> case o of
+      Hd _ -> interpreterError p "Cannot get head of an empty list."
       Em _ -> return $ BoolV True
       Tl _ -> return $ ListV EmptyList
-      _ -> interpreterError p "Invalid operation on an empty list."
     _ -> interpreterError p "Invalid list operation on a non-list."
 
 declare :: Decl -> StateT Env Err ()
