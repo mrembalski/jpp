@@ -18,4 +18,8 @@ z rachunkiem lambda (docelowo)
 Ma za zadanie być prostym językiem funkcyjnym, który będzie łatwy w nauce,
 a jednocześnie będzie miał możliwość wykorzystania w praktyce.
 
-Gramatykę mozna sprawdzic za pomocą ./ops/compile.sh oraz ./ops/run_good.sh.
+Wywołanie make tworzy folder Ruskell, w którym znajduje się m.in. plik Par.info.
+
+Interpreter mozna uruchomić za pomocą ./interpreter <ściezka_do_pliku>.
+
+Jezeli sciezka nie zostanie podana, interpreter wyczyta program z stdin.
