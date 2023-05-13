@@ -211,18 +211,22 @@ eval (FunE p o e) = do
       Hd _ -> case l of
         [] -> interpreterError p "Cannot get head of an empty list."
         (x : _) -> return $ IntV x
-      Tl _ -> return $ ListV $ IntListV $ tail l
+      Tl _ -> case l of
+        [] -> interpreterError p "Cannot get tail of an empty list."
+        (_ : xs) -> return $ ListV $ IntListV xs
       Em _ -> return $ BoolV $ null l
     ListV (BoolListV l) -> case o of
       Hd _ -> case l of
         [] -> interpreterError p "Cannot get head of an empty list."
         (x : _) -> return $ BoolV x
-      Tl _ -> return $ ListV $ BoolListV $ tail l
+      Tl _ -> case l of
+        [] -> interpreterError p "Cannot get tail of an empty list."
+        (_ : xs) -> return $ ListV $ BoolListV xs
       Em _ -> return $ BoolV $ null l
     ListV EmptyList -> case o of
       Hd _ -> interpreterError p "Cannot get head of an empty list."
+      Tl _ -> interpreterError p "Cannot get tail of an empty list."
       Em _ -> return $ BoolV True
-      Tl _ -> return $ ListV EmptyList
     _ -> interpreterError p "Invalid list operation on a non-list."
 
 declare :: Decl -> StateT Env Err ()
