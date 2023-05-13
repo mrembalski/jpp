@@ -24,8 +24,6 @@
 Razem: 20
 
 Uwaga:
-Zgodnie z tym, co było mówione na zajęciach, zaznaczyłem te punkty, które
-na 99% zrobię. Chcę wykonać dodatkowe podpunkty, jednak nie jestem, co do
-nich pewien, czy uda mi się je zrobić. Zgodnie z treścią zadania, jezeli
-sytuacja się zmieni, będę kontaktował się ze sprawdzającym i aktualizował
-tabelkę cech.
+Zaznaczone są te punkty, które planowałem oraz wykonałem.
+
+Przy dodatkowym czasie i chęci, chciałbym zająć się pattern matchingiem.
