@@ -37,5 +37,6 @@ Main : Ruskell/Abs.hs Ruskell/Lex.hs Ruskell/Par.hs Ruskell/Print.hs Ruskell/Tes
 # Rules for cleaning generated files.
 clean :
 	rm -rf Ruskell
+	rm -rf *.hi *.o interpreter
 
 # EOF

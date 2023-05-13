@@ -4,7 +4,7 @@ max_counter=0
 echo "Running examples..."
 echo "Good examples:"
 
-for f in ../examples/good/*; do
+for f in ./examples/good/*; do
     max_counter=$((max_counter+1))
 
     echo "\"$f\"..."
@@ -20,7 +20,7 @@ for f in ../examples/good/*; do
 done
 
 echo "Bad examples:"
-for f in ../examples/bad/*; do
+for f in ./examples/bad/*; do
     max_counter=$((max_counter+1))
 
     echo "\"$f\"..."
