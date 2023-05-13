@@ -9,7 +9,7 @@ for f in ../examples/good/*; do
 
     echo "\"$f\"..."
 
-    ./Interpreter "$f"
+    ./interpreter "$f"
 
     if [ $? -eq 0 ]; then
         counter=$((counter+1))
@@ -25,7 +25,7 @@ for f in ../examples/bad/*; do
 
     echo "\"$f\"..."
 
-    ./Interpreter "$f"
+    ./interpreter "$f"
 
     if [ $? -eq 0 ]; then
         echo "ERROR"
