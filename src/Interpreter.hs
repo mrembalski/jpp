@@ -154,8 +154,8 @@ eval (VarE p (Ident var)) = do
   case env !? var of
     Just val -> case val of
       FunV fun env' -> case fun of
-        ExpF exp -> local (const $ insert var val env) (eval exp)
-        LambdaF _ _ -> return $ FunV fun (insert var val env)
+        ExpF exp -> local (const $ insert var val env') (eval exp)
+        LambdaF _ _ -> return $ FunV fun (insert var val env')
       _ -> return val
     Nothing -> interpreterError p ("Variable " ++ var ++ " not found.")
 
