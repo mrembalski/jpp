@@ -10,6 +10,9 @@ HAPPY_OPTS = --array --info --ghc --coerce
 ALEX       = alex
 ALEX_OPTS  = --ghc
 
+# BNFC  = /home/students/inf/PUBLIC/MRJP/bin/bnfc
+BNFC  = /Users/michalrembalski/.local/bin/bnfc
+
 # List of goals not corresponding to file names.
 
 .PHONY : all clean
@@ -20,7 +23,7 @@ all : Main
 
 # Rules for building the parser.
 Ruskell/Abs.hs Ruskell/LexRuskell.x Ruskell/ParRuskell.y Ruskell/Print.hs Ruskell/Test.hs : Ruskell.cf
-	bnfc --haskell -d --functor Ruskell.cf
+	${BNFC} --haskell -d --functor Ruskell.cf
 
 %.hs : %.y
 	${HAPPY} ${HAPPY_OPTS} $<
