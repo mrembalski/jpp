@@ -2,4 +2,18 @@ fact x = let {
         fact_acc n acc = if n == 0 then acc else fact_acc (n - 1) (n * acc)
     } in fact_acc x 1;
 
-main = fact 5 == 120;
+toBits x = let {
+        toBitsAcc n acc = if n == 0 then acc else
+            toBitsAcc (n / 2) ((if n / 2 * 2 == n then 0 else 1) : acc)
+    } in toBitsAcc x [];
+
+reverse x = let {
+        reverseAcc x acc = if empty x then acc else
+            reverseAcc (tail x) ((head x) : acc)
+    } in reverseAcc x [];
+
+# fact 5 = 120
+# toBits 120 = [1, 1, 1, 1, 0, 0, 0]
+# reverse [1, 1, 1, 1, 0, 0, 0] = [0, 0, 0, 1, 1, 1, 1]
+
+main = reverse (toBits (fact 5)) == [0, 0, 0, 1, 1, 1, 1];

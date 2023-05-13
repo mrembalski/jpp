@@ -1,5 +1,5 @@
 f x y z = x + y + z;
 
-partialApplication1 = f 2;
+partialApplication = f 2; # adds 2
 
-main = partialApplication1 3 4;
+main = partialApplication 3 4 == 9; # then adds 3 and 4 -> 9

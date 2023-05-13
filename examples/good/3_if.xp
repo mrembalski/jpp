@@ -1,1 +1,14 @@
-main = if True then False else True;
+isEven x = if x / 2 * 2 == x then True else False;
+
+isOdd x = if isEven x then False else True;
+
+negate x = if x == True then False else True;
+
+# x + (addTo42 x) == 42
+addTo42 x = 42 - x;
+
+x = 11;
+
+# this should be true for any x
+main = if negate (isOdd (x + (addTo42 x))) == isEven 42 then True else False;
+

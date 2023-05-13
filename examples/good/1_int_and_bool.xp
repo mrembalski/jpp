@@ -2,7 +2,6 @@ negate x = !x;
 
 doubleNegate x = negate (negate x);
 
-# it would be nice to add function composition (in the future) so it is possible to eta reduce this:
 doubleDoubleNegate x = doubleNegate (doubleNegate x);
 
 isPositive x = if x > 0 then True else False;

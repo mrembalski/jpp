@@ -11,4 +11,4 @@ lambdaDef =
                 f a; # 3
 
 
-main = functionDef == lambdaDef
+main = functionDef == lambdaDef && functionDef == 3;

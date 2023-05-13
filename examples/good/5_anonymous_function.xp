@@ -1,3 +1,8 @@
-anonymousFunctionExample = (\x -> x * 2) 5;
+anonymousFunctionExample = (\x -> x * 2) 21; # 42
 
-main = anonymousFunctionExample == 10;
+otherAnonymousFunctionExample =
+    (\x -> let {
+        fourtyTwo = 42;
+    } in fourtyTwo) 10; # 42
+
+main = anonymousFunctionExample == otherAnonymousFunctionExample;

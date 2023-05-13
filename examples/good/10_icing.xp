@@ -6,4 +6,5 @@ recursionLoopAppend n = if n == 0 then [0] else n:(recursionLoopAppend (n - 1));
 # x ++ y
 recursionMerge x y = if empty x then y else (head x):(recursionMerge (tail x) y);
 
+# this should print out [10,...,0,1,2,3,4]
 main = recursionMerge (recursionLoopAppend 10) initialList;
