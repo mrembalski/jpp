@@ -2,6 +2,5 @@
 *.hi
 *.info
 
-src/Ruskell
-
-src/interpreter
+Ruskell/
+interpreter
